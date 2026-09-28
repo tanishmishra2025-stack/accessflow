@@ -34,9 +34,9 @@ class AccessibilityIssue(Base):
         nullable=False,
     )
 
-    wcag_ref: Mapped[str] = mapped_column(
+    wcag_ref: Mapped[str | None] = mapped_column(
         String,
-        nullable=False,
+        nullable=True,
     )
 
     audit = relationship(

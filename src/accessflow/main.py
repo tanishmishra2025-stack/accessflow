@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from accessflow.config import DATABASE_URL
+from accessflow.routers.audits import router as audits_router
 
 app = FastAPI(
     title="AccessFlow API",
@@ -7,6 +8,7 @@ app = FastAPI(
     version="0.1.0"
 )
 
+app.include_router(audits_router)
 
 @app.get("/")
 def root():
