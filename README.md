@@ -1,6 +1,7 @@
 # AccessFlow
 
 ![CI](https://github.com/tanishmishra2025-stack/accessflow/actions/workflows/ci.yml/badge.svg)
+
 **AccessFlow is a backend service that scans a website for common accessibility
 problems, stores the findings, and serves them through a REST API.**
 
@@ -106,9 +107,7 @@ gives you that site's audit history over time.
 ```bash
 docker compose up --build
 ```
-
 Then visit `http://localhost:8000/docs` for the interactive API explorer.
-
 ## API
 
 | Endpoint | Method | Purpose |
@@ -121,12 +120,14 @@ Then visit `http://localhost:8000/docs` for the interactive API explorer.
 `POST /audits` is synchronous — the request blocks until the scan finishes.
 That's a deliberate v1 simplification; see [What's next](#whats-next).
 
-### Example
+### Example Request
 
-Request:
+`POST /audits`
+
 ```json
-POST /audits
-{ "url": "https://www.w3.org/WAI/demos/bad/before/home.html" }
+{
+  "url": "https://www.w3.org/WAI/demos/bad/before/home.html"
+}
 ```
 
 Response (`201`) — real output from a live run against this URL:
@@ -167,13 +168,13 @@ running the scan.
 `POST /audits` triggers a real browser to visit whatever URL is submitted.
 Without a check, that's a server-side request forgery (SSRF) risk — someone
 could submit an internal address (`localhost`, `169.254.169.254`, etc.) and
-use this service to probe a network it can reach but they can't. URLs are
+use this service to probe a network it can reach, but they can't. URLs are
 validated before the browser ever loads them; requests targeting private or
 internal addresses are rejected with a `422`.
 
 **Known limitation:** this check resolves the hostname once, before the
 scan. A hostname that resolves to a public address at validation time and a
-private one moments later (DNS rebinding), or a public page that redirects
+private one moment later (DNS rebinding), or a public page that redirects
 to an internal address mid-scan, isn't caught by this check alone. Fully
 closing that gap needs request interception inside the browser itself.
 
